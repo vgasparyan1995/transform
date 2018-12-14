@@ -24,9 +24,9 @@ decltype(auto) __transform_helper(InputIter1 first1, InputIter1 last1, ArgsTuple
 template <typename InputIter1, typename ... InputIters_OutputIter_Function>
 decltype(auto) transform(InputIter1 first1, InputIter1 last1, InputIters_OutputIter_Function ... inputIters_outputIter_function)
 {
-    const auto argsTuple = std::make_tuple(inputIters_outputIter_function ...);
-    constexpr auto argsTupleSize = std::tuple_size<decltype(argsTuple)>::value;
-    return __transform_helper(first1, last1, argsTuple, std::make_index_sequence<argsTupleSize - 2> ());
+    return __transform_helper(first1, last1,
+                              std::forward_as_tuple(inputIters_outputIter_function ...),
+                              std::make_index_sequence<sizeof ... (inputIters_outputIter_function) - 2> ());
 }
 
 } // namespace my
